@@ -10,15 +10,26 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use IOrganiserRepository;
 
 class OrganiserController extends Controller
 {
+    protected IOrganiserRepository $organiserRepository;
+
+    /**
+     * @param IOrganiserRepository $organiserRepository
+     */
+    public function __construct(IOrganiserRepository $organiserRepository)
+    {
+        $this->organiserRepository = $organiserRepository;
+    }
+
     public function index(Request $request): View|Factory|Application
     {
-        $organisers = Organiser::query()
-            ->when($request->has('search'),
-                fn($query) => $query->where('full_name', 'like', '%'.$request->get('search').'%'))
-        ->latest()->paginate(10);
+        if ($request->has('search'))
+            $organisers = $this->organiserRepository->findAll($request->get('search'));
+        else
+            $organisers = $this->organiserRepository->all();
         return view('organisers/index', compact('organisers'));
     }
 
@@ -29,8 +40,7 @@ class OrganiserController extends Controller
 
     public function store(OrganiserStoreRequest $request): RedirectResponse
     {
-
-        Organiser::query()->create($request->validated());
+        $this->organiserRepository->create($request->validated());
 
         return redirect()->route('organisers.index')->with('success', 'Organiser created successfully.');
     }
@@ -49,15 +59,14 @@ class OrganiserController extends Controller
     public function update(OrganiserUpdateRequest $request, Organiser $organiser): RedirectResponse
     {
 
-        $organiser->update($request->validated());
+        $this->organiserRepository->update($organiser, $request->validated());
 
         return redirect()->route('organisers.index')->with('success', 'Organiser updated successfully.');
     }
 
     public function destroy(Organiser $organiser): RedirectResponse
     {
-        Event::query()->where('organiser', $organiser->name)->delete();
-        $organiser->delete();
+        $this->organiserRepository->delete($organiser);
 
         return redirect()->route('organisers.index')->with('success', 'Organiser deleted successfully.');
     }

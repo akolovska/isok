@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventStoreRequest;
 use App\Http\Requests\EventUpdateRequest;
 use App\Models\Event;
-use App\Models\Organiser;
-use IEventRepository;
+use App\Repositories\IEventRepository;
+use App\Repositories\IOrganiserRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use IOrganiserRepository;
-use function Laravel\Prompts\search;
 
 class EventController extends Controller
 {

@@ -51,7 +51,4 @@
         </tbody>
     </table>
 
-    <div>
-        {{ $events->links() }}
-    </div>
 @endsection

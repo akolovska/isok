@@ -1,4 +1,6 @@
 <?php
+namespace App\Repositories;
+
 use App\Models\Organiser;
 use Illuminate\Database\Eloquent\Collection;
 class OrganiserRepository implements IOrganiserRepository {
@@ -29,11 +31,11 @@ class OrganiserRepository implements IOrganiserRepository {
         return $organiser->delete();
     }
 
-    public function findAll(string $search): \Illuminate\Pagination\LengthAwarePaginator
+    public function findAll(?string $search): \Illuminate\Pagination\LengthAwarePaginator
     {
         return Organiser::query()
             ->when($search,
-                fn($query) => $query->where('name', 'like', '%'.$search.'%'))
+                fn($query) => $query->where('full_name', 'like', '%'.$search.'%'))
             ->latest()
             ->paginate(10);
     }

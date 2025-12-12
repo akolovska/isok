@@ -47,7 +47,4 @@
         </tbody>
     </table>
 
-    <div>
-        {{ $organisers->links() }}
-    </div>
 @endsection

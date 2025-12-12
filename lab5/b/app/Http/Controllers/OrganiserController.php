@@ -10,8 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use IOrganiserRepository;
-
+use App\Repositories\IOrganiserRepository;
 class OrganiserController extends Controller
 {
     protected IOrganiserRepository $organiserRepository;
@@ -26,12 +25,12 @@ class OrganiserController extends Controller
 
     public function index(Request $request): View|Factory|Application
     {
-        if ($request->has('search'))
-            $organisers = $this->organiserRepository->findAll($request->get('search'));
-        else
-            $organisers = $this->organiserRepository->all();
-        return view('organisers/index', compact('organisers'));
+        $organisers = $this->organiserRepository
+            ->findAll($request->get('search'));
+
+        return view('organisers.index', compact('organisers'));
     }
+
 
     public function create(): View|Factory|Application
     {

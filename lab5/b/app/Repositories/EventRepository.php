@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Repositories;
 use App\Models\Event;
 
 class EventRepository implements IEventRepository {
